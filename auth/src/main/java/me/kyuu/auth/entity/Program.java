@@ -1,18 +1,17 @@
 package me.kyuu.auth.entity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
-public class Menu {
+public class Program {
     @Id
     @GeneratedValue
-    @Column(name = "menu_id")
+    @Column(name = "program_id")
     private Long id;
 
-    private Long upMenuId;
     private String name;
-    private int sortOrder;
+    private String filePath;
+    private String attachPath;
+
 }
