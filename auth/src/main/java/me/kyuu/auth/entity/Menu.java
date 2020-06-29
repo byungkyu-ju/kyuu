@@ -9,11 +9,10 @@ import javax.persistence.Id;
 public class Menu {
     @Id
     @GeneratedValue
-    private Long menuId;
+    @Column(name = "menu_id")
+    private Long id;
 
     private Long upMenuId;
-
     private String name;
-
     private int sortOrder;
 }
