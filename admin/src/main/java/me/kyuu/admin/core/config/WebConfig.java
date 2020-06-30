@@ -1,4 +1,4 @@
-package me.kyuu.auth.core.config;
+package me.kyuu.admin.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

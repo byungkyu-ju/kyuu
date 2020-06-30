@@ -1,13 +1,13 @@
-package me.kyuu.auth;
+package me.kyuu.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthApplication {
+public class AdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthApplication.class, args);
+        SpringApplication.run(AdminApplication.class, args);
     }
 
 }

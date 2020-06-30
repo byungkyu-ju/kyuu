@@ -1,4 +1,4 @@
-package me.kyuu.auth.entity;
+package me.kyuu.admin.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,13 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Menu {
+public class Member {
     @Id
     @GeneratedValue
-    @Column(name = "menu_id")
+    @Column(name = "member_id")
     private Long id;
 
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
+    private String email;
+    private String password;
+
 }

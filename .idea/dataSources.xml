@@ -7,5 +7,13 @@
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:mem:auth</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="me.kyuu.admin.main/Hibernate" uuid="c43a9e39-9a69-4503-a5f9-f2ebb4297ffa">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate</remarks>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:mem:auth</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -1,10 +1,10 @@
-package me.kyuu.auth;
+package me.kyuu.admin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthApplicationTests {
+class AdminApplicationTests {
 
     @Test
     void contextLoads() {
