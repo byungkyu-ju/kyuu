@@ -22,8 +22,37 @@
 
 package me.kyuu.admin.core.exception;
 
+import lombok.Builder;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 import javax.servlet.http.HttpServletResponse;
 
-public class ErrorResponse {
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
 
+@ControllerAdvice
+@EnableWebMvc
+public class DefaultExceptionHandler {
+
+    @BeforeEach
+    public void setUp() throws Exception{
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity BusinessExceptionHandler(HttpServletResponse response, BusinessException exception){
+        System.out.println("???????????");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -20,10 +20,11 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.exception;
+package me.kyuu.admin.menu.controller;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RestController;
 
-public class ErrorResponse {
+@RestController
+public class MenuControlller {
 
 }

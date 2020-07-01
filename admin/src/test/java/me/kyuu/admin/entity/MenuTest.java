@@ -20,10 +20,22 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.exception;
+package me.kyuu.admin.entity;
 
-import javax.servlet.http.HttpServletResponse;
+import me.kyuu.admin.menu.entity.Menu;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-public class ErrorResponse {
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+@SpringBootTest
+class MenuTest {
 
+    @DisplayName("메뉴생성 테스트")
+    @Test
+    void create_menu_test() {
+    }
 }

@@ -20,10 +20,45 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.exception;
+package me.kyuu.admin.menu.entity;
 
-import javax.servlet.http.HttpServletResponse;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import me.kyuu.admin.core.exception.BusinessException;
+import org.springframework.util.StringUtils;
 
-public class ErrorResponse {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
+@Getter
+@NoArgsConstructor
+public class Menu {
+    @Id
+    @GeneratedValue
+    @Column(name = "menu_id")
+    private Long id;
+
+    private Long upMenuId;
+    private String name;
+    private int sortOrder;
+
+    @Builder
+    public Menu(String name, int sortOrder){
+        if(StringUtils.isEmpty(name)) throw new BusinessException("name error");
+        this.name = name;
+        this.sortOrder = sortOrder;
+    }
+
+    @Builder
+    public Menu(Long upMenuId, String name, int sortOrder){
+
+        this.upMenuId = upMenuId;
+        this.name = name;
+        this.sortOrder = sortOrder;
+    }
 }

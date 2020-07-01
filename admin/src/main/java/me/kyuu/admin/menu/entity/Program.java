@@ -20,10 +20,20 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.exception;
+package me.kyuu.admin.menu.entity;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-public class ErrorResponse {
+public class Program {
+    @Id
+    @GeneratedValue
+    @Column(name = "program_id")
+    private Long id;
+
+    private String name;
+    private String filePath;
+    private String attachPath;
 
 }
