@@ -20,32 +20,29 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.MenuDto;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Menu {
-    @Id
-    @GeneratedValue
-    @Column(name = "menu_id")
-    private Long id;
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+public class MenuDto {
 
-    public Menu(MenuDto.CreateMenuRequest request) {
-        this.upMenuId = request.getUpMenuId();
-        this.name = request.getName();
-        this.sortOrder = request.getSortOrder();
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateMenuRequest {
+        @NotNull(message = "상위 메뉴ID가 존재하지 않습니다.")
+        private Long upMenuId;
+        private String name;
+        private int sortOrder;
     }
 }

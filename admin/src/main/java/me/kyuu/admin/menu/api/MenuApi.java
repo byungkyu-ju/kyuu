@@ -20,32 +20,23 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.api;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.MenuDto;
+import me.kyuu.admin.core.mvc.DefaultApiController;
+import me.kyuu.admin.menu.dto.ProgramDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.Valid;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Menu {
-    @Id
-    @GeneratedValue
-    @Column(name = "menu_id")
-    private Long id;
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
+@RestController("/api/menu")
+public class MenuApi extends DefaultApiController {
 
-    public Menu(MenuDto.CreateMenuRequest request) {
-        this.upMenuId = request.getUpMenuId();
-        this.name = request.getName();
-        this.sortOrder = request.getSortOrder();
+    @PostMapping
+    public ResponseEntity<ProgramDto.CreateProgramRequest> program(@RequestBody @Valid ProgramDto.CreateProgramRequest request){
+
+        return null;
     }
 }

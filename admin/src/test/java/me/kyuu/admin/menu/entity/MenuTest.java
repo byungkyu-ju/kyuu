@@ -22,30 +22,44 @@
 
 package me.kyuu.admin.menu.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.MenuDto;
+import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.dao.MenuRepository;
+import me.kyuu.admin.menu.dto.MenuDto.CreateMenuRequest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.Optional;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Menu {
-    @Id
-    @GeneratedValue
-    @Column(name = "menu_id")
-    private Long id;
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
+import static org.assertj.core.api.Assertions.assertThat;
 
-    public Menu(MenuDto.CreateMenuRequest request) {
-        this.upMenuId = request.getUpMenuId();
-        this.name = request.getName();
-        this.sortOrder = request.getSortOrder();
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+class MenuTest extends DefaultTest {
+
+    @Autowired
+    MenuRepository menuRepository;
+
+    @DisplayName("메뉴생성 테스트")
+    @Test
+    void create_menu_test() {
+        //given
+        CreateMenuRequest createMenuRequest = CreateMenuRequest.builder()
+                .upMenuId(0L)
+                .name("menuName")
+                .sortOrder(1)
+                .build();
+        Menu menu = new Menu(createMenuRequest);
+        //when
+        Menu savedMenu = menuRepository.save(menu);
+        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
+        //then
+        assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
     }
+
+
+
 }

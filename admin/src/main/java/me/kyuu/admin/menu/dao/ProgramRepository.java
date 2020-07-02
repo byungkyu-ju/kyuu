@@ -20,32 +20,14 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.dao;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.MenuDto;
+import me.kyuu.admin.menu.entity.Program;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-@Getter
-@NoArgsConstructor
-public class Menu {
-    @Id
-    @GeneratedValue
-    @Column(name = "menu_id")
-    private Long id;
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
-
-    public Menu(MenuDto.CreateMenuRequest request) {
-        this.upMenuId = request.getUpMenuId();
-        this.name = request.getName();
-        this.sortOrder = request.getSortOrder();
-    }
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+public interface ProgramRepository extends JpaRepository<Program, Long> {
 }

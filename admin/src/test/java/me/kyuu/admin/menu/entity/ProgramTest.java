@@ -22,29 +22,41 @@
 
 package me.kyuu.admin.menu.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.dao.ProgramRepository;
 import me.kyuu.admin.menu.dto.ProgramDto;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.Optional;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Program {
-    @Id
-    @GeneratedValue
-    @Column(name = "program_id")
-    private Long id;
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private String name;
-    private String url;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+class ProgramTest extends DefaultTest {
 
-    public Program(ProgramDto.CreateProgramRequest request) {
-        this.name = request.getName();
-        this.url = request.getUrl();
+    @Autowired
+    ProgramRepository programRepository;
+
+    @DisplayName("프로그램 생성 테스트")
+    @Test
+    void createProgram() {
+        //given
+        ProgramDto.CreateProgramRequest createProgramRequest = ProgramDto.CreateProgramRequest.builder()
+                .name("dashboard")
+                .url("/dashboard")
+                .build();
+        Program program = new Program(createProgramRequest);
+        //when
+        Program savedProgram = programRepository.save(program);
+        Optional<Program> findProgram = programRepository.findById(savedProgram.getId());
+        //then
+        assertThat(findProgram.get().getId()).isEqualTo(program.getId());
     }
+
 }

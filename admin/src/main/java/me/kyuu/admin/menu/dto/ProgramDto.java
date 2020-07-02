@@ -20,32 +20,39 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.MenuDto;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Menu {
-    @Id
-    @GeneratedValue
-    @Column(name = "menu_id")
-    private Long id;
-    private Long upMenuId;
-    private String name;
-    private int sortOrder;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
 
-    public Menu(MenuDto.CreateMenuRequest request) {
-        this.upMenuId = request.getUpMenuId();
-        this.name = request.getName();
-        this.sortOrder = request.getSortOrder();
+public class ProgramDto {
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateProgramRequest {
+        @NotNull
+        private String name;
+        private String url;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateProgramResponse {
+        @NotNull
+        private Long id;
+        private String name;
+        private String url;
     }
 }

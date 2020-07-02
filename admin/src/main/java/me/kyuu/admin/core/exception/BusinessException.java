@@ -22,9 +22,6 @@
 
 package me.kyuu.admin.core.exception;
 
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
-
 /**
  * @author byung-kyu.ju
  * @discription

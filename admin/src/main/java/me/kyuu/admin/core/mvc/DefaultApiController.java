@@ -20,11 +20,16 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.controller;
+package me.kyuu.admin.core.mvc;
 
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 
-@RestController
-public class MenuControlller {
-
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+@Slf4j
+public class DefaultApiController {
+    protected ModelMapper modelMapper;
 }

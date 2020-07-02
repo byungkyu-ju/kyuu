@@ -22,16 +22,13 @@
 
 package me.kyuu.admin.core.exception;
 
-import lombok.Builder;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.MockitoAnnotations;
+import lombok.extern.slf4j.Slf4j;
+import org.h2.api.ErrorCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,17 +39,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @ControllerAdvice
-@EnableWebMvc
+@Slf4j
 public class DefaultExceptionHandler {
 
-    @BeforeEach
-    public void setUp() throws Exception{
-        MockitoAnnotations.initMocks(this);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> DefaultMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        /*
+        log.error("handleMethodArgumentNotValidException", exception);
+        final ErrorResponse response = exception.getBindingResult().getet
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);*/
+        return null;
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity BusinessExceptionHandler(HttpServletResponse response, BusinessException exception){
-        System.out.println("???????????");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 }
