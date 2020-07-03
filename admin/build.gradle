@@ -46,6 +46,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.hibernate.validator:hibernate-validator:6.1.5.Final'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

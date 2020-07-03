@@ -44,8 +44,9 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 //.anyRequest().authenticated()
                 .anyRequest().anonymous()
                 .and()
-                .csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers()
+                //.csrf().ignoringAntMatchers("/h2-console/**")
+                .csrf().disable()
+                .headers()
                 .addHeaderWriter(
                         new XFrameOptionsHeaderWriter(
                                 new WhiteListedAllowFromStrategy(Arrays.asList("localhost"))

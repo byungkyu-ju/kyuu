@@ -22,10 +22,13 @@
 
 package me.kyuu.admin.core.exception;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author byung-kyu.ju
  * @discription
  */
+@Component
 public class BusinessException extends RuntimeException {
     public BusinessException() {
         super();
@@ -33,6 +36,7 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String message) {
         super(message);
+        System.out.println("!@#$!@#$");
     }
 
     public BusinessException(String message, Throwable cause) {

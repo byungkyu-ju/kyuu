@@ -20,32 +20,26 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.api;
+package me.kyuu.admin.core.exception;
 
-import lombok.extern.slf4j.Slf4j;
-import me.kyuu.admin.menu.dto.ProgramDto;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
-import java.net.URI;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-import static me.kyuu.admin.menu.dto.ProgramDto.*;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+@Getter
+@AllArgsConstructor
+public enum ErrorCodes {
+    @Enumerated(EnumType.STRING)
+    NOT_FOUND_EXCEPTION("E404", "application ocoured not found exception. See more details");
 
-@RestController
-@Slf4j
-@RequestMapping(value = "/api/menus")
-public class MenuApi {
-
-    @PostMapping(value = "program")
-    public ResponseEntity program(@RequestBody @Valid CreateProgramRequest request){
-        System.out.println("running...");
-        CreateProgramResponse response = new CreateProgramResponse(1234L,"name","url");
-
-        URI createdUri = linkTo((MenuApi.class)).slash("1234").toUri();
-        return ResponseEntity.created(createdUri).body(response);
-    }
-
+    private String errorCode;
+    private String message;
 }
+

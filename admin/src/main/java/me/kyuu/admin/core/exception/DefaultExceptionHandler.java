@@ -23,15 +23,10 @@
 package me.kyuu.admin.core.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.h2.api.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author byung-kyu.ju
@@ -42,13 +37,19 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class DefaultExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> DefaultMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        /*
-        log.error("handleMethodArgumentNotValidException", exception);
-        final ErrorResponse response = exception.getBindingResult().getet
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);*/
-        return null;
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity<ErrorResponse> defaultExceptionHandler(Exception exception) {
+        ErrorResponseDetail errorResponseDetail = ErrorResponseDetail.builder()
+                .field("field")
+                .value("val")
+                .location("here")
+                .issue("iss")
+                .description("des")
+                .build();
+
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCodes.NOT_FOUND_EXCEPTION.getErrorCode(), errorResponseDetail).builder()
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
