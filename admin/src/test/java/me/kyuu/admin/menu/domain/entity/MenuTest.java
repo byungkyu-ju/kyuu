@@ -20,29 +20,45 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.dto;
+package me.kyuu.admin.menu.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.dao.MenuRepository;
+import me.kyuu.admin.menu.domain.dto.MenuDto.CreateMenuRequest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.validation.constraints.NotNull;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-public class MenuDto {
+class MenuTest extends DefaultTest {
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @Builder
-    public static class CreateMenuRequest {
-        @NotNull(message = "상위 메뉴ID가 존재하지 않습니다.")
-        private Long upMenuId;
-        private String name;
-        private int sortOrder;
+    @Autowired
+    MenuRepository menuRepository;
+
+    @DisplayName("메뉴생성 테스트")
+    @Test
+    void create_menu_test() {
+        //given
+        CreateMenuRequest createMenuRequest = CreateMenuRequest.builder()
+                .upMenuId(0L)
+                .name("menuName")
+                .sortOrder(1)
+                .build();
+        Menu menu = new Menu(createMenuRequest);
+        //when
+        Menu savedMenu = menuRepository.save(menu);
+        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
+        //then
+        assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
     }
+
+
+
 }

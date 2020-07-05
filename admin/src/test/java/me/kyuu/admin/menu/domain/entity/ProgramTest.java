@@ -20,39 +20,42 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.dto;
+package me.kyuu.admin.menu.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.dao.ProgramRepository;
+import me.kyuu.admin.menu.domain.dto.ProgramDto;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.validation.constraints.NotNull;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
+class ProgramTest extends DefaultTest {
 
-public class ProgramDto {
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @Builder
-    public static class CreateProgramRequest {
-        @NotNull
-        private String name;
-        private String url;
+    @Autowired
+    ProgramRepository programRepository;
+
+    @DisplayName("프로그램 생성 테스트")
+    @Test
+    void createProgram() {
+        //given
+        ProgramDto.CreateProgramRequest createProgramRequest = ProgramDto.CreateProgramRequest.builder()
+                .name("dashboard")
+                .url("/dashboard")
+                .build();
+        Program program = new Program(createProgramRequest);
+        //when
+        Program savedProgram = programRepository.save(program);
+        Optional<Program> findProgram = programRepository.findById(savedProgram.getId());
+        //then
+        assertThat(findProgram.get().getId()).isEqualTo(program.getId());
     }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @Builder
-    public static class CreateProgramResponse {
-        @NotNull
-        private Long id;
-        private String name;
-        private String url;
-    }
 }

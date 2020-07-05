@@ -23,15 +23,13 @@
 package me.kyuu.admin.menu.api;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kyuu.admin.menu.dto.ProgramDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 
-import static me.kyuu.admin.menu.dto.ProgramDto.*;
+import static me.kyuu.admin.menu.domain.dto.ProgramDto.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController

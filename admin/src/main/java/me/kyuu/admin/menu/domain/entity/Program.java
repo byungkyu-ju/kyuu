@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.dto.ProgramDto;
+import me.kyuu.admin.menu.domain.dto.ProgramDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

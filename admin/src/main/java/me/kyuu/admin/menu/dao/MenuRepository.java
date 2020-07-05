@@ -22,7 +22,7 @@
 
 package me.kyuu.admin.menu.dao;
 
-import me.kyuu.admin.menu.entity.Menu;
+import me.kyuu.admin.menu.domain.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

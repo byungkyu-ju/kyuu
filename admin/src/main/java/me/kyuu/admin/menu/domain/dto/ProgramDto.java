@@ -20,46 +20,39 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.entity;
+package me.kyuu.admin.menu.domain.dto;
 
-import me.kyuu.admin.menu.core.DefaultTest;
-import me.kyuu.admin.menu.dao.MenuRepository;
-import me.kyuu.admin.menu.dto.MenuDto.CreateMenuRequest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-class MenuTest extends DefaultTest {
 
-    @Autowired
-    MenuRepository menuRepository;
-
-    @DisplayName("메뉴생성 테스트")
-    @Test
-    void create_menu_test() {
-        //given
-        CreateMenuRequest createMenuRequest = CreateMenuRequest.builder()
-                .upMenuId(0L)
-                .name("menuName")
-                .sortOrder(1)
-                .build();
-        Menu menu = new Menu(createMenuRequest);
-        //when
-        Menu savedMenu = menuRepository.save(menu);
-        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
-        //then
-        assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
+public class ProgramDto {
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateProgramRequest {
+        @NotNull
+        private String name;
+        private String url;
     }
 
-
-
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateProgramResponse {
+        @NotNull
+        private Long id;
+        private String name;
+        private String url;
+    }
 }

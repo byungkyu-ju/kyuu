@@ -20,14 +20,29 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.dao;
+package me.kyuu.admin.menu.domain.dto;
 
-import me.kyuu.admin.menu.domain.entity.Program;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-public interface ProgramRepository extends JpaRepository<Program, Long> {
+public class MenuDto {
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CreateMenuRequest {
+        @NotNull(message = "상위 메뉴ID가 존재하지 않습니다.")
+        private Long upMenuId;
+        private String name;
+        private int sortOrder;
+    }
 }
