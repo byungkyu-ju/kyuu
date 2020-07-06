@@ -22,35 +22,34 @@
 
 package me.kyuu.admin.menu.api;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.test.web.servlet.MockMvc;
 
-import javax.validation.Valid;
-import java.net.URI;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramRequest;
-import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+@SpringBootTest
+@AutoConfigureMockMvc
+class MenuApiTest {
 
-@RestController
-@Slf4j
-@RequestMapping(value = "/api/menus")
-public class MenuApi {
+    protected MockMvc mockMvc;
 
-    @PostMapping(value = "program")
-    public ResponseEntity program(@RequestBody @Valid CreateProgramRequest request) {
+    @Test
+    @DisplayName(value = "프로그램 등록")
+    void createProgram() throws Exception {
+        mockMvc.perform(post("/api/menus/program"))
+                .andDo(print());
 
-        CreateProgramResponse response = CreateProgramResponse.builder()
-                .id(1L)
-                .name("naming")
-                .url("/")
-                .build();
-        URI createdUri = linkTo((MenuApi.class)).slash("1234").toUri();
-        return ResponseEntity.created(createdUri).body(response);
     }
 
 }

@@ -22,27 +22,21 @@
 
 package me.kyuu.admin.core.exception;
 
-import lombok.*;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-@Getter
 @Builder
+@Getter
+@AllArgsConstructor
 public class ErrorResponse {
 
-    private String name;
+    private String errorCode;
     private String message;
-    private ErrorResponseDetail errorResponseDetail;
+    private ErrorResponseDetail details;
 
-    public ErrorResponse(String errorCode, ErrorResponseDetail errorResponseDetail){
-
-        this.name = ErrorCodes.valueOf(errorCode).getErrorCode();
-        this.message = ErrorCodes.valueOf(errorCode).getMessage();
-        this.errorResponseDetail = errorResponseDetail;
-    }
 }

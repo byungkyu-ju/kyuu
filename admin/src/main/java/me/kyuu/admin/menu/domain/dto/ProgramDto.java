@@ -22,10 +22,7 @@
 
 package me.kyuu.admin.menu.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -36,7 +33,7 @@ import javax.validation.constraints.NotNull;
 
 public class ProgramDto {
     @Getter
-    @Setter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class CreateProgramRequest {
@@ -46,7 +43,7 @@ public class ProgramDto {
     }
 
     @Getter
-    @Setter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class CreateProgramResponse {

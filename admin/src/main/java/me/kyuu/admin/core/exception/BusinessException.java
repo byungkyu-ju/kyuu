@@ -36,7 +36,6 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String message) {
         super(message);
-        System.out.println("!@#$!@#$");
     }
 
     public BusinessException(String message, Throwable cause) {

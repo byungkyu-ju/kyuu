@@ -25,31 +25,30 @@ package me.kyuu.admin.core.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class DefaultExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ErrorResponse> defaultExceptionHandler(Exception exception) {
-        ErrorResponseDetail errorResponseDetail = ErrorResponseDetail.builder()
-                .field("field")
-                .value("val")
-                .location("here")
-                .issue("iss")
-                .description("des")
+        log.error(exception.getLocalizedMessage());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(ErrorCodes.NOT_FOUND_EXCEPTION.getErrorCode())
+                .message(ErrorCodes.NOT_FOUND_EXCEPTION.getMessage())
+                .details(ErrorResponseDetail.builder()
+                        .description(exception.getLocalizedMessage())
+                        .build()
+                )
                 .build();
-
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCodes.NOT_FOUND_EXCEPTION.getErrorCode(), errorResponseDetail).builder()
-                .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }

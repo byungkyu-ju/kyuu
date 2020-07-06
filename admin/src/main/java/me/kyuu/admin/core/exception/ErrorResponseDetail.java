@@ -34,9 +34,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class ErrorResponseDetail {
-    private String field;
-    private String value;
-    private String location;
-    private String issue;
     private String description;
 }
