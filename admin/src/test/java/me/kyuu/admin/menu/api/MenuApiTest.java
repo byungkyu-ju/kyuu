@@ -22,6 +22,8 @@
 
 package me.kyuu.admin.menu.api;
 
+import me.kyuu.admin.menu.core.DefaultApiControllerTest;
+import me.kyuu.admin.menu.domain.dto.ProgramDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author byung-kyu.ju
@@ -40,14 +43,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-class MenuApiTest {
+class MenuApiTest extends DefaultApiControllerTest {
 
-    protected MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     @DisplayName(value = "프로그램 등록")
     void createProgram() throws Exception {
-        mockMvc.perform(post("/api/menus/program"))
+        ProgramDto.CreateProgramRequest request = ProgramDto.CreateProgramRequest.builder()
+                .name("root")
+                .url("/dashboard")
+                .build();
+
+        mockMvc.perform(post("/api/menus/program")
+                .contentType(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isCreated())
                 .andDo(print());
 
     }

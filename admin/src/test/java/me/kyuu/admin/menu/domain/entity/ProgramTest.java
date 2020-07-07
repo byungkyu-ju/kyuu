@@ -22,7 +22,7 @@
 
 package me.kyuu.admin.menu.domain.entity;
 
-import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.core.DefaultApiControllerTest;
 import me.kyuu.admin.menu.dao.ProgramRepository;
 import me.kyuu.admin.menu.domain.dto.ProgramDto;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author byung-kyu.ju
  * @discription
  */
-class ProgramTest extends DefaultTest {
+class ProgramTest extends DefaultApiControllerTest {
 
     @Autowired
     ProgramRepository programRepository;

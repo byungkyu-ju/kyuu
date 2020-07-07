@@ -23,6 +23,12 @@
 package me.kyuu.admin.menu.api;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kyuu.admin.core.mvc.DefaultApiController;
+import me.kyuu.admin.menu.domain.entity.Program;
+import me.kyuu.admin.menu.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,27 +36,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramRequest;
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "/api/menus")
-public class MenuApi {
+@RequestMapping(value = "/api/menus", produces = MediaTypes.HAL_JSON_VALUE)
+public class MenuApi extends DefaultApiController {
+    @Autowired
+    private MenuService menuService;
 
     @PostMapping(value = "program")
-    public ResponseEntity program(@RequestBody @Valid CreateProgramRequest request) {
-
-        CreateProgramResponse response = CreateProgramResponse.builder()
-                .id(1L)
-                .name("naming")
-                .url("/")
-                .build();
-        URI createdUri = linkTo((MenuApi.class)).slash("1234").toUri();
-        return ResponseEntity.created(createdUri).body(response);
+    public ResponseEntity<?> program(@RequestBody @Valid CreateProgramRequest request) {
+        Program savedProgram = menuService.createProgram(new Program(request));
+        return ResponseEntity.ok().body(
+                EntityModel.of(new CreateProgramResponse(this.getClass(), savedProgram))
+        );
     }
 
 }

@@ -22,9 +22,19 @@
 
 package me.kyuu.admin.menu.domain.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import me.kyuu.admin.menu.api.MenuApi;
+import me.kyuu.admin.menu.domain.entity.Program;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 /**
  * @author byung-kyu.ju
@@ -43,13 +53,19 @@ public class ProgramDto {
     }
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class CreateProgramResponse {
+    public static class CreateProgramResponse extends RepresentationModel {
         @NotNull
         private Long id;
         private String name;
         private String url;
+
+        public CreateProgramResponse(Class apiClass, Program program , Link... links) {
+            this.id = program.getId();
+            this.name = program.getName();
+            this.url = program.getUrl();
+            add(linkTo(apiClass).withSelfRel());
+            add(linkTo(apiClass).slash(this.id).withRel("update"));
+        }
+
     }
 }

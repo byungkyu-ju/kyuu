@@ -22,7 +22,7 @@
 
 package me.kyuu.admin.menu.domain.entity;
 
-import me.kyuu.admin.menu.core.DefaultTest;
+import me.kyuu.admin.menu.core.DefaultApiControllerTest;
 import me.kyuu.admin.menu.dao.MenuRepository;
 import me.kyuu.admin.menu.domain.dto.MenuDto.CreateMenuRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author byung-kyu.ju
  * @discription
  */
-class MenuTest extends DefaultTest {
+class MenuTest extends DefaultApiControllerTest {
 
     @Autowired
     MenuRepository menuRepository;
@@ -58,7 +58,5 @@ class MenuTest extends DefaultTest {
         //then
         assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
     }
-
-
 
 }

@@ -20,32 +20,28 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.domain.entity;
+package me.kyuu.admin.menu.core;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.domain.dto.ProgramDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
 
-@Entity
-@Getter
-@NoArgsConstructor
-public class Program {
-    @Id
-    @GeneratedValue
-    @Column(name = "program_id")
-    private Long id;
+@SpringBootTest
+@AutoConfigureMockMvc
+@Disabled
+public class DefaultApiControllerTest {
+    @Autowired
+    protected MockMvc mockMvc;
 
-    private String name;
-    private String url;
+    @Autowired
+    protected ObjectMapper objectMapper;
 
-    public Program(ProgramDto.CreateProgramRequest request) {
-        this.name = request.getName();
-        this.url = request.getUrl();
-    }
 }
