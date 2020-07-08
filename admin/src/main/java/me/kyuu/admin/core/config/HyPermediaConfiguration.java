@@ -20,14 +20,16 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.mvc;
+package me.kyuu.admin.core.config;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-public class DefaultApiController {
-    protected ModelMapper modelMapper;
+@Configuration
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL_FORMS)
+public class HyPermediaConfiguration {
 }

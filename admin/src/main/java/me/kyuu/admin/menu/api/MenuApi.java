@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.kyuu.admin.core.mvc.DefaultApiController;
 import me.kyuu.admin.menu.domain.entity.Program;
 import me.kyuu.admin.menu.service.MenuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +43,7 @@ import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
 @Slf4j
 @RequestMapping(value = "/api/menus", produces = MediaTypes.HAL_JSON_VALUE)
 public class MenuApi extends DefaultApiController {
-    @Autowired
+
     private MenuService menuService;
 
     @PostMapping(value = "program")
