@@ -22,6 +22,7 @@
 
 package me.kyuu.admin.menu.api;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kyuu.admin.core.mvc.DefaultApiController;
 import me.kyuu.admin.menu.domain.entity.Program;
@@ -35,23 +36,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramRequest;
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/menus", produces = MediaTypes.HAL_JSON_VALUE)
 public class MenuApi extends DefaultApiController {
 
-    private MenuService menuService;
+    private final MenuService menuService;
 
     @PostMapping(value = "program")
     public ResponseEntity<?> program(@RequestBody @Valid CreateProgramRequest request) {
         Program savedProgram = menuService.createProgram(new Program(request));
-        return ResponseEntity.ok().body(
-                EntityModel.of(new CreateProgramResponse(this.getClass(), savedProgram))
+        URI createdUri = linkTo(methodOn(this.getClass()).program(request)).withSelfRel().toUri();
+
+        return ResponseEntity.created(createdUri).body(
+                EntityModel.of(new CreateProgramResponse(savedProgram)).add(
+                        linkTo(this.getClass()).withSelfRel())
         );
     }
-
 }
+
+
+

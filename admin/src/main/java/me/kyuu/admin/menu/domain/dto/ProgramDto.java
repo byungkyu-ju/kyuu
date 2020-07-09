@@ -22,10 +22,7 @@
 
 package me.kyuu.admin.menu.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.kyuu.admin.menu.domain.entity.Program;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -53,19 +50,16 @@ public class ProgramDto {
     }
 
     @Getter
-    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
+    public static class CreateProgramResponse extends RepresentationModel<CreateProgramResponse> {
         @NotNull
         private Long id;
         private String name;
         private String url;
 
-        public CreateProgramResponse(Class apiClass, Program program, Link... links) {
+        public CreateProgramResponse(Program program, Link... links){
             this.id = program.getId();
             this.name = program.getName();
             this.url = program.getUrl();
-            add(linkTo(apiClass).withSelfRel());
         }
     }
-
-
 }
