@@ -23,14 +23,12 @@
 package me.kyuu.admin.menu.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kyuu.admin.menu.dao.MenuRepository;
 import me.kyuu.admin.menu.dao.ProgramRepository;
-import me.kyuu.admin.menu.domain.entity.Menu;
 import me.kyuu.admin.menu.domain.entity.Program;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * @author byung-kyu.ju
@@ -43,7 +41,11 @@ public class MenuService {
     private final ProgramRepository programRepository;
 
     @Transactional
-    public Program createProgram(Program program) {
+    public Program createPrograms(Program program) {
         return programRepository.save(program);
+    }
+
+    public Optional<Program> findProgramById(Long id) {
+        return programRepository.findById(id);
     }
 }

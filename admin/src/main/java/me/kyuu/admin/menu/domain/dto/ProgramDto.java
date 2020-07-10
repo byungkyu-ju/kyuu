@@ -56,10 +56,20 @@ public class ProgramDto {
         private String name;
         private String url;
 
-        public CreateProgramResponse(Program program, Link... links){
+        public CreateProgramResponse(Program program){
             this.id = program.getId();
             this.name = program.getName();
             this.url = program.getUrl();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class FindProgramReqeust {
+        @NotNull
+        private String name;
+        private String url;
     }
 }

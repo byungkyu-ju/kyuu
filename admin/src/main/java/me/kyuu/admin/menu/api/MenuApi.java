@@ -25,18 +25,17 @@ package me.kyuu.admin.menu.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kyuu.admin.core.mvc.DefaultApiController;
+import me.kyuu.admin.menu.domain.dto.ProgramDto;
 import me.kyuu.admin.menu.domain.entity.Program;
 import me.kyuu.admin.menu.service.MenuService;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramRequest;
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
@@ -51,16 +50,25 @@ public class MenuApi extends DefaultApiController {
 
     private final MenuService menuService;
 
-    @PostMapping(value = "program")
-    public ResponseEntity<?> program(@RequestBody @Valid CreateProgramRequest request) {
-        Program savedProgram = menuService.createProgram(new Program(request));
-        URI createdUri = linkTo(methodOn(this.getClass()).program(request)).withSelfRel().toUri();
+    @PostMapping("/programs")
+    public ResponseEntity programs(@RequestBody @Valid CreateProgramRequest request) {
+        Program savedProgram = menuService.createPrograms(new Program(request));
+        URI createdUri = linkTo(methodOn(this.getClass()).programs(request)).withSelfRel().toUri();
 
         return ResponseEntity.created(createdUri).body(
                 EntityModel.of(new CreateProgramResponse(savedProgram)).add(
                         linkTo(this.getClass()).withSelfRel())
         );
     }
+
+    @GetMapping("/programs/{id}")
+    public ResponseEntity programs(@PathVariable Long id){
+        Optional<Program> findProgram = menuService.findProgramById(id);
+        return ResponseEntity.ok().body(findProgram);
+    }
+
+
+
 }
 
 

@@ -48,4 +48,8 @@ public class Program {
         this.name = request.getName();
         this.url = request.getUrl();
     }
+
+    public Program(ProgramDto.FindProgramReqeust request) {
+
+    }
 }
