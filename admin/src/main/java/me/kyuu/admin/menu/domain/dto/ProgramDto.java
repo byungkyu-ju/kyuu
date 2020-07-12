@@ -50,7 +50,7 @@ public class ProgramDto {
     }
 
     @Getter
-    public static class CreateProgramResponse extends RepresentationModel<CreateProgramResponse> {
+    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
         @NotNull
         private Long id;
         private String name;
