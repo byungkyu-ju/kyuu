@@ -25,8 +25,10 @@ package me.kyuu.admin.menu.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kyuu.admin.core.mvc.DefaultApiController;
+import me.kyuu.admin.menu.domain.dto.ProgramDto;
 import me.kyuu.admin.menu.domain.entity.Program;
 import me.kyuu.admin.menu.service.MenuService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramRequest;
 import static me.kyuu.admin.menu.domain.dto.ProgramDto.CreateProgramResponse;
@@ -49,22 +53,24 @@ public class MenuApi extends DefaultApiController {
 
     private final MenuService menuService;
 
-    @PostMapping("/programs")
-    public ResponseEntity programs(@RequestBody @Valid CreateProgramRequest request) {
-        Program savedProgram = menuService.createPrograms(new Program(request));
-        URI createdUri = linkTo(methodOn(this.getClass()).programs(request)).withSelfRel().toUri();
-        ResponseEntity<EntityModel<CreateProgramResponse>> responseEntity = ResponseEntity.created(createdUri).body(
-                EntityModel.of(new CreateProgramResponse(savedProgram)).add(
-                        linkTo(this.getClass()).withSelfRel())
-        );
-        return responseEntity;
+    @GetMapping("/programs")
+    public CollectionModel<EntityModel<ProgramDto.FindProgramsResponse>> programs() {
+        List<Program> programs = menuService.findPrograms();
+        List<ProgramDto.FindProgramsResponse> collect = programs.stream().map(program -> new ProgramDto.FindProgramsResponse(program))
+                .collect(Collectors.toList());
+        CollectionModel<EntityModel<ProgramDto.FindProgramsResponse>> collectionModel = CollectionModel.wrap(collect);
+        collectionModel.add(linkTo(MenuApi.class)
+        .withSelfRel());
+        return collectionModel;
     }
 
+
     @GetMapping("/programs/{id}")
-    public ResponseEntity programs(@PathVariable Long id) {
+    public ResponseEntity programDetail(@PathVariable Long id) {
         Optional<Program> findProgram = menuService.findProgramById(id);
         return ResponseEntity.ok().body(findProgram);
     }
+
 }
 
 

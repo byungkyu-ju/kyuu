@@ -41,11 +41,14 @@ public class Menu {
     private Long id;
     private Long upMenuId;
     private String name;
+    private int level;
     private int sortOrder;
+    private boolean isValid;
 
     public Menu(MenuDto.CreateMenuRequest request) {
         this.upMenuId = request.getUpMenuId();
         this.name = request.getName();
+        this.level = request.getLevel();
         this.sortOrder = request.getSortOrder();
     }
 }

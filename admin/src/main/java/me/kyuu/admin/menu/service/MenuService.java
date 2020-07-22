@@ -26,8 +26,9 @@ import lombok.RequiredArgsConstructor;
 import me.kyuu.admin.menu.dao.ProgramRepository;
 import me.kyuu.admin.menu.domain.entity.Program;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,12 +41,12 @@ public class MenuService {
 
     private final ProgramRepository programRepository;
 
-    @Transactional
-    public Program createPrograms(Program program) {
-        return programRepository.save(program);
-    }
-
+    @Transactional(readOnly=true)
     public Optional<Program> findProgramById(Long id) {
         return programRepository.findById(id);
+    }
+
+    public List<Program> findPrograms() {
+        return programRepository.findAll();
     }
 }

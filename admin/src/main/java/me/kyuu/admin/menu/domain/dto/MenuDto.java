@@ -43,6 +43,7 @@ public class MenuDto {
         @NotNull(message = "상위 메뉴ID가 존재하지 않습니다.")
         private Long upMenuId;
         private String name;
+        private int level;
         private int sortOrder;
     }
 }

@@ -27,9 +27,13 @@ import me.kyuu.admin.menu.domain.entity.Program;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
+import javax.swing.text.html.parser.Entity;
 import javax.validation.constraints.NotNull;
+
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -39,25 +43,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
  */
 
 public class ProgramDto {
+
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class CreateProgramRequest {
+    @Relation(value = "program", collectionRelation = "programs")
+    public static class FindProgramsResponse extends EntityModel<FindProgramsResponse> {
         @NotNull
         private String name;
         private String url;
-    }
 
-    @Getter
-    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
-        @NotNull
-        private Long id;
-        private String name;
-        private String url;
-
-        public CreateProgramResponse(Program program){
-            this.id = program.getId();
+        public FindProgramsResponse(Program program) {
             this.name = program.getName();
             this.url = program.getUrl();
         }
@@ -67,9 +61,36 @@ public class ProgramDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class FindProgramReqeust {
+    public static class CreateProgramRequest {
         @NotNull
         private String name;
         private String url;
+        private String remark;
+
     }
+    @Getter
+    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
+        @NotNull
+        private Long id;
+        private String name;
+
+        private String url;
+        public CreateProgramResponse(Program program){
+            this.id = program.getId();
+            this.name = program.getName();
+            this.url = program.getUrl();
+        }
+
+    }
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class FindProgramsRequest {
+        @NotNull
+        private String name;
+
+        private String url;
+    }
+
 }

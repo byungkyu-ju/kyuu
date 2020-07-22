@@ -22,6 +22,7 @@
 
 package me.kyuu.admin.menu.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,16 +42,15 @@ public class Program {
     @GeneratedValue
     @Column(name = "program_id")
     private Long id;
-
     private String name;
     private String url;
+    private String remark;
+    private boolean isValid;
 
     public Program(ProgramDto.CreateProgramRequest request) {
         this.name = request.getName();
         this.url = request.getUrl();
+        this.remark = request.getRemark();
     }
 
-    public Program(ProgramDto.FindProgramReqeust request) {
-
-    }
 }
