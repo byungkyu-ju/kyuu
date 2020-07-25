@@ -20,32 +20,32 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.domain.entity;
+package me.kyuu.admin.program.domain.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kyuu.admin.menu.domain.dto.ProgramDto;
+import me.kyuu.admin.program.domain.dto.ProgramDto;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@DynamicUpdate
 public class Program {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "program_id")
     private Long id;
     private String name;
     private String url;
     private String remark;
-    private boolean isValid;
+
+    private boolean isValid = true;
 
     public Program(ProgramDto.CreateProgramRequest request) {
         this.name = request.getName();
@@ -53,4 +53,19 @@ public class Program {
         this.remark = request.getRemark();
     }
 
+    public Program(ProgramDto.UpdateProgramRequest request) {
+        this.name = request.getName();
+        this.url = request.getUrl();
+        this.remark = request.getRemark();
+    }
+
+    public void updateProgram(Program program) {
+        this.name = program.getName();
+        this.url = program.getUrl();
+        this.remark = program.getRemark();
+    }
+
+    public void deleteProgram() {
+        this.isValid = false;
+    }
 }

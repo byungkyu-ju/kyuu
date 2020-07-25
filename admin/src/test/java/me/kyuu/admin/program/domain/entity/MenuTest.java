@@ -20,33 +20,41 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.service;
+package me.kyuu.admin.program.domain.entity;
 
-import lombok.RequiredArgsConstructor;
-import me.kyuu.admin.menu.dao.ProgramRepository;
-import me.kyuu.admin.menu.domain.entity.Program;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import me.kyuu.admin.program.core.DefaultApiControllerTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-@Service
-@RequiredArgsConstructor
-public class MenuService {
+class MenuTest extends DefaultApiControllerTest {
 
-    private final ProgramRepository programRepository;
+    @Autowired
+    MenuRepository menuRepository;
 
-    @Transactional(readOnly=true)
-    public Optional<Program> findProgramById(Long id) {
-        return programRepository.findById(id);
+    @DisplayName("메뉴생성 테스트")
+    @Test
+    void create_menu_test() {
+        //given
+        CreateMenuRequest createMenuRequest = CreateMenuRequest.builder()
+                .upMenuId(0L)
+                .name("menuName")
+                .sortOrder(1)
+                .build();
+        Menu menu = new Menu(createMenuRequest);
+        //when
+        Menu savedMenu = menuRepository.save(menu);
+        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
+        //then
+        assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
     }
 
-    public List<Program> findPrograms() {
-        return programRepository.findAll();
-    }
 }

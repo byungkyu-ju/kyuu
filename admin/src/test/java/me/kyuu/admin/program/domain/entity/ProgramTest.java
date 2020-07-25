@@ -20,48 +20,42 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.api;
+package me.kyuu.admin.program.domain.entity;
 
-import me.kyuu.admin.menu.core.DefaultApiControllerTest;
-import me.kyuu.admin.menu.domain.dto.ProgramDto;
+import me.kyuu.admin.program.core.DefaultApiControllerTest;
+import me.kyuu.admin.program.dao.ProgramRepository;
+import me.kyuu.admin.program.domain.dto.ProgramDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-@SpringBootTest
-@AutoConfigureMockMvc
-class MenuApiTest extends DefaultApiControllerTest {
+class ProgramTest extends DefaultApiControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    ProgramRepository programRepository;
 
+    @DisplayName("프로그램 생성 테스트")
     @Test
-    @DisplayName(value = "프로그램 등록")
-    void createProgram() throws Exception {
-        ProgramDto.CreateProgramRequest request = ProgramDto.CreateProgramRequest.builder()
-                .name("root")
+    void createProgram() {
+        //given
+        ProgramDto.CreateProgramRequest createProgramRequest = ProgramDto.CreateProgramRequest.builder()
+                .name("dashboard")
                 .url("/dashboard")
                 .build();
-/*
-        mockMvc.perform(post("/api/menus/program")
-                .contentType(MediaTypes.HAL_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(request))
-        ).andExpect(status().isCreated())
-                .andDo(print());*/
-
+        Program program = new Program(createProgramRequest);
+        //when
+        Program savedProgram = programRepository.save(program);
+        Optional<Program> findProgram = programRepository.findById(savedProgram.getId());
+        //then
+        assertThat(findProgram.get().getId()).isEqualTo(program.getId());
     }
 
 }

@@ -20,43 +20,46 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.domain.entity;
+package me.kyuu.admin.program.api;
 
-import me.kyuu.admin.menu.core.DefaultApiControllerTest;
-import me.kyuu.admin.menu.dao.MenuRepository;
-import me.kyuu.admin.menu.domain.dto.MenuDto.CreateMenuRequest;
+import me.kyuu.admin.program.core.DefaultApiControllerTest;
+import me.kyuu.admin.program.domain.dto.ProgramDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-class MenuTest extends DefaultApiControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+class MenuApiTest extends DefaultApiControllerTest {
 
     @Autowired
-    MenuRepository menuRepository;
+    private MockMvc mockMvc;
 
-    @DisplayName("메뉴생성 테스트")
     @Test
-    void create_menu_test() {
-        //given
-        CreateMenuRequest createMenuRequest = CreateMenuRequest.builder()
-                .upMenuId(0L)
-                .name("menuName")
-                .sortOrder(1)
+    @DisplayName(value = "프로그램 등록")
+    void createProgram() throws Exception {
+        ProgramDto.CreateProgramRequest request = ProgramDto.CreateProgramRequest.builder()
+                .name("root")
+                .url("/dashboard")
                 .build();
-        Menu menu = new Menu(createMenuRequest);
-        //when
-        Menu savedMenu = menuRepository.save(menu);
-        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
-        //then
-        assertThat(menu.getId()).isEqualTo(findMenu.get().getId());
+/*
+        mockMvc.perform(post("/api/menus/program")
+                .contentType(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isCreated())
+                .andDo(print());*/
+
     }
 
 }

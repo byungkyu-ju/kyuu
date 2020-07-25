@@ -20,14 +20,28 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.dao;
+package me.kyuu.admin.program.core;
 
-import me.kyuu.admin.menu.domain.entity.Program;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-public interface ProgramRepository extends JpaRepository<Program, Long> {
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Disabled
+public class DefaultApiControllerTest {
+    @Autowired
+    protected MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
 }

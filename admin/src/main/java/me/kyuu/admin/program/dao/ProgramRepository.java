@@ -20,42 +20,17 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.domain.entity;
+package me.kyuu.admin.program.dao;
 
-import me.kyuu.admin.menu.core.DefaultApiControllerTest;
-import me.kyuu.admin.menu.dao.ProgramRepository;
-import me.kyuu.admin.menu.domain.dto.ProgramDto;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.kyuu.admin.program.domain.entity.Program;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author byung-kyu.ju
  * @discription
  */
-class ProgramTest extends DefaultApiControllerTest {
-
-    @Autowired
-    ProgramRepository programRepository;
-
-    @DisplayName("프로그램 생성 테스트")
-    @Test
-    void createProgram() {
-        //given
-        ProgramDto.CreateProgramRequest createProgramRequest = ProgramDto.CreateProgramRequest.builder()
-                .name("dashboard")
-                .url("/dashboard")
-                .build();
-        Program program = new Program(createProgramRequest);
-        //when
-        Program savedProgram = programRepository.save(program);
-        Optional<Program> findProgram = programRepository.findById(savedProgram.getId());
-        //then
-        assertThat(findProgram.get().getId()).isEqualTo(program.getId());
-    }
-
+public interface ProgramRepository extends JpaRepository<Program, Long> {
+    Program findByIdAndIsValid(Long programId, boolean isValid);
 }

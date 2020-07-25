@@ -20,22 +20,21 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.menu.domain.dto;
+package me.kyuu.admin.program.domain.dto;
 
-import lombok.*;
-import me.kyuu.admin.menu.domain.entity.Program;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import me.kyuu.admin.program.api.ProgramApi;
+import me.kyuu.admin.program.domain.entity.Program;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
-import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.swing.text.html.parser.Entity;
 import javax.validation.constraints.NotNull;
 
-import java.util.List;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * @author byung-kyu.ju
@@ -44,53 +43,97 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 public class ProgramDto {
 
-    @Getter
     @Relation(value = "program", collectionRelation = "programs")
-    public static class FindProgramsResponse extends EntityModel<FindProgramsResponse> {
-        @NotNull
-        private String name;
-        private String url;
-
-        public FindProgramsResponse(Program program) {
-            this.name = program.getName();
-            this.url = program.getUrl();
-        }
-    }
-
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class CreateProgramRequest {
-        @NotNull
+    public static class FindProgramsResponse extends EntityModel<FindProgramsResponse> {
+        private Long id;
         private String name;
         private String url;
         private String remark;
 
-    }
-    @Getter
-    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
-        @NotNull
-        private Long id;
-        private String name;
-
-        private String url;
-        public CreateProgramResponse(Program program){
+        public FindProgramsResponse(Program program) {
             this.id = program.getId();
             this.name = program.getName();
             this.url = program.getUrl();
+            this.remark = program.getRemark();
+            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+        }
+    }
+
+    @Getter
+    public static class FindProgramResponse extends EntityModel<FindProgramResponse> {
+        private Long id;
+        private String name;
+        private String url;
+        private String remark;
+
+        public FindProgramResponse(Program program) {
+            this.id = program.getId();
+            this.name = program.getName();
+            this.url = program.getUrl();
+            this.remark = program.getRemark();
+            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+        }
+    }
+
+
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class CreateProgramRequest {
+        @NotNull
+        private String name;
+        @NotNull
+        private String url;
+        private String remark;
+
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
+        private Long id;
+        private String name;
+        private String url;
+        private String remark;
+
+        public CreateProgramResponse(Program program) {
+            this.id = program.getId();
+            this.name = program.getName();
+            this.url = program.getUrl();
+            this.remark = program.getRemark();
+            add(linkTo(methodOn(ProgramApi.class).createProgram(null)).slash(id).withSelfRel());
         }
 
     }
-    @Getter
-    @NoArgsConstructor
+
     @AllArgsConstructor
-    @Builder
-    public static class FindProgramsRequest {
+    @NoArgsConstructor
+    @Getter
+    public static class UpdateProgramRequest {
         @NotNull
         private String name;
-
         private String url;
+        private String remark;
     }
 
+    @Getter
+    public static class UpdateProgramResponse extends EntityModel<UpdateProgramResponse> {
+        private Long id;
+        private String name;
+        private String url;
+        private String remark;
+
+        public UpdateProgramResponse(Program program) {
+            this.id = program.getId();
+            this.name = program.getName();
+            this.url = program.getUrl();
+            this.remark = program.getRemark();
+            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+        }
+    }
+
+    public class DeleteProgramRequest {
+    }
 }
