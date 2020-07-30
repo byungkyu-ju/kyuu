@@ -22,13 +22,10 @@
 
 package me.kyuu.admin.program.domain.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kyuu.admin.program.domain.dto.ProgramDto;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 

@@ -23,6 +23,7 @@
 plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java'
 }
 
@@ -47,6 +48,9 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:6.1.5.Final'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'com.querydsl:querydsl-jpa' //querydsl 추가
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8' //query logging
+
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -66,3 +70,19 @@ test {
     useJUnitPlatform()
 }
 
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝

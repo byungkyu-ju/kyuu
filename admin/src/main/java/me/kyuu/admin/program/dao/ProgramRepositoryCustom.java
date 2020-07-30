@@ -22,14 +22,11 @@
 
 package me.kyuu.admin.program.dao;
 
-import me.kyuu.admin.program.domain.entity.Program;
-import org.springframework.data.jpa.repository.JpaRepository;
+import me.kyuu.admin.program.domain.dto.ProgramDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-/**
- * @author byung-kyu.ju
- * @discription
- */
+public interface ProgramRepositoryCustom {
 
-public interface ProgramRepository extends JpaRepository<Program, Long>, ProgramRepositoryCustom {
-
+    Page<ProgramDto.SearchResponse> search(ProgramDto.SearchProgramCondition condition, Pageable pageable);
 }

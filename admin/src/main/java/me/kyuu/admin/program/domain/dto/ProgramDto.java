@@ -22,14 +22,12 @@
 
 package me.kyuu.admin.program.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.*;
 import me.kyuu.admin.program.api.ProgramApi;
 import me.kyuu.admin.program.domain.entity.Program;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.core.Relation;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.constraints.NotNull;
 
@@ -43,39 +41,51 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class ProgramDto {
 
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SearchProgramCondition {
+        private Long id;
+        private String name;
+        private String url;
+    }
+
     @Relation(value = "program", collectionRelation = "programs")
-    @Getter
-    public static class FindProgramsResponse extends EntityModel<FindProgramsResponse> {
+    //@Getter
+    @Data
+    public static class SearchResponse extends EntityModel<SearchResponse> {
         private Long id;
         private String name;
         private String url;
         private String remark;
 
-        public FindProgramsResponse(Program program) {
+        @QueryProjection
+        public SearchResponse(Program program) {
             this.id = program.getId();
             this.name = program.getName();
             this.url = program.getUrl();
             this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+            add(linkTo(methodOn(ProgramApi.class).search(null,null,null)).slash(id).withSelfRel());
         }
     }
 
     @Getter
-    public static class FindProgramResponse extends EntityModel<FindProgramResponse> {
+    @NoArgsConstructor
+    public static class DetailResponse extends EntityModel<DetailResponse> {
         private Long id;
         private String name;
         private String url;
         private String remark;
 
-        public FindProgramResponse(Program program) {
+        public DetailResponse(Program program) {
             this.id = program.getId();
             this.name = program.getName();
             this.url = program.getUrl();
             this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+            add(linkTo(methodOn(ProgramApi.class).detail(id)).withSelfRel());
         }
     }
-
 
 
     @AllArgsConstructor
@@ -103,7 +113,7 @@ public class ProgramDto {
             this.name = program.getName();
             this.url = program.getUrl();
             this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).createProgram(null)).slash(id).withSelfRel());
+            //add(linkTo(methodOn(ProgramApi.class).createProgram(null)).slash(id).withSelfRel());
         }
 
     }
@@ -130,10 +140,11 @@ public class ProgramDto {
             this.name = program.getName();
             this.url = program.getUrl();
             this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
+            //add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
         }
     }
 
     public class DeleteProgramRequest {
     }
+
 }

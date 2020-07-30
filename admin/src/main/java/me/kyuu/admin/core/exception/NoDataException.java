@@ -20,16 +20,27 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.dao;
+package me.kyuu.admin.core.exception;
 
-import me.kyuu.admin.program.domain.entity.Program;
-import org.springframework.data.jpa.repository.JpaRepository;
+public class NoDataException extends RuntimeException{
 
-/**
- * @author byung-kyu.ju
- * @discription
- */
+    public NoDataException() {
+        super();
+    }
 
-public interface ProgramRepository extends JpaRepository<Program, Long>, ProgramRepositoryCustom {
+    public NoDataException(String message) {
+        super(message);
+    }
 
+    public NoDataException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NoDataException(Throwable cause) {
+        super(cause);
+    }
+
+    protected NoDataException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

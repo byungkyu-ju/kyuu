@@ -23,13 +23,15 @@
 package me.kyuu.admin.program.service;
 
 import lombok.RequiredArgsConstructor;
+import me.kyuu.admin.core.exception.NoDataException;
 import me.kyuu.admin.program.dao.ProgramRepository;
 import me.kyuu.admin.program.domain.dto.ProgramDto;
 import me.kyuu.admin.program.domain.entity.Program;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,10 +40,17 @@ public class ProgramService {
     private final ProgramRepository programRepository;
 
     @Transactional(readOnly = true)
-    public List<Program> findPrograms() {
-        return programRepository.findAll();
+    public Page<ProgramDto.SearchResponse> search(ProgramDto.SearchProgramCondition condition, Pageable pageable) {
+        return programRepository.search(condition, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public ProgramDto.DetailResponse detail(Long id) {
+        Program program = programRepository.findById(id).orElseThrow(NoDataException::new);
+        return new ProgramDto.DetailResponse(program);
+    }
+
+/*
     @Transactional(readOnly = true)
     public Program findProgramDetail(Long programId) {
         return programRepository.findByIdAndIsValid(programId, true);
@@ -64,5 +73,5 @@ public class ProgramService {
     public void deleteProgram(Long id) {
         Program program = programRepository.findById(id).orElseThrow();
         program.deleteProgram();
-    }
+    }*/
 }
