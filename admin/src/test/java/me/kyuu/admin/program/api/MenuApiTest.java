@@ -27,9 +27,7 @@ import me.kyuu.admin.program.domain.dto.ProgramDto;
 import me.kyuu.admin.program.domain.entity.Program;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -44,7 +42,6 @@ import javax.persistence.EntityManager;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 /**
  * @author byung-kyu.ju
@@ -74,6 +71,27 @@ class MenuApiTest extends DefaultApiControllerTest {
     }
 
     @Test
+    @DisplayName(value = "프로그램목록 조회_컨텐츠타입에러")
+    void findPrograms_contentTypeError() throws Exception {
+        mockMvc.perform(get("/api/programs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("page").exists());
+
+        //
+        mockMvc.perform(get("/api/programs")
+                .contentType(MediaType.APPLICATION_XML)
+                .accept(MediaTypes.HAL_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("page").exists());
+    }
+
+    @Test
     @DisplayName(value = "프로그램 추가")
     void createProgram() throws Exception {
         //given
@@ -82,8 +100,6 @@ class MenuApiTest extends DefaultApiControllerTest {
                 .url("url")
                 .remark("remark")
                 .build();
-
-
 
         //when
         ResultActions action = mockMvc.perform(post("/api/programs/program")
@@ -105,7 +121,7 @@ class MenuApiTest extends DefaultApiControllerTest {
 
     @Test
     @DisplayName(value = "프로그램 수정")
-    void updateProgram() throws Exception{
+    void updateProgram() throws Exception {
 
         //given
         Program program = Program.builder()
@@ -139,7 +155,7 @@ class MenuApiTest extends DefaultApiControllerTest {
 
     @Test
     @DisplayName(value = "프로그램 삭제")
-    void deleteProgram() throws Exception{
+    void deleteProgram() throws Exception {
 
         //given
         Program program = Program.builder()
@@ -159,7 +175,4 @@ class MenuApiTest extends DefaultApiControllerTest {
                 .andExpect(status().isNoContent());
 
     }
-
-
-
 }
