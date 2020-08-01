@@ -41,11 +41,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class ProgramDto {
 
-    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SearchProgramCondition {
+    public static class SearchCondition {
         private Long id;
         private String name;
         private String url;
@@ -78,6 +77,7 @@ public class ProgramDto {
         private String url;
         private String remark;
 
+        @QueryProjection
         public DetailResponse(Program program) {
             this.id = program.getId();
             this.name = program.getName();
@@ -88,10 +88,11 @@ public class ProgramDto {
     }
 
 
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class CreateProgramRequest {
+    public static class CreateRequest {
         @NotNull
         private String name;
         @NotNull
@@ -100,51 +101,16 @@ public class ProgramDto {
 
     }
 
-    @Getter
-    @NoArgsConstructor
-    public static class CreateProgramResponse extends EntityModel<CreateProgramResponse> {
-        private Long id;
-        private String name;
-        private String url;
-        private String remark;
 
-        public CreateProgramResponse(Program program) {
-            this.id = program.getId();
-            this.name = program.getName();
-            this.url = program.getUrl();
-            this.remark = program.getRemark();
-            //add(linkTo(methodOn(ProgramApi.class).createProgram(null)).slash(id).withSelfRel());
-        }
-
-    }
-
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class UpdateProgramRequest {
+    public static class UpdateRequest {
         @NotNull
         private String name;
         private String url;
         private String remark;
-    }
-
-    @Getter
-    public static class UpdateProgramResponse extends EntityModel<UpdateProgramResponse> {
-        private Long id;
-        private String name;
-        private String url;
-        private String remark;
-
-        public UpdateProgramResponse(Program program) {
-            this.id = program.getId();
-            this.name = program.getName();
-            this.url = program.getUrl();
-            this.remark = program.getRemark();
-            //add(linkTo(methodOn(ProgramApi.class).findProgramDetail(id)).withSelfRel());
-        }
-    }
-
-    public class DeleteProgramRequest {
     }
 
 }

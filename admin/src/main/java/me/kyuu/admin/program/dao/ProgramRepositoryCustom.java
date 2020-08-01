@@ -28,5 +28,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProgramRepositoryCustom {
 
-    Page<ProgramDto.SearchResponse> search(ProgramDto.SearchProgramCondition condition, Pageable pageable);
+    Page<ProgramDto.SearchResponse> search(ProgramDto.SearchCondition condition, Pageable pageable);
+    ProgramDto.DetailResponse detail(Long id);
 }

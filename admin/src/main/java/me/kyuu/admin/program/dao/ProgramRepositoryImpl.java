@@ -27,13 +27,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import me.kyuu.admin.program.domain.dto.ProgramDto;
 import me.kyuu.admin.program.domain.dto.ProgramDto.SearchResponse;
+import me.kyuu.admin.program.domain.dto.QProgramDto_DetailResponse;
 import me.kyuu.admin.program.domain.dto.QProgramDto_SearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 
 import static me.kyuu.admin.program.domain.entity.QProgram.program;
@@ -46,7 +46,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Page<SearchResponse> search(ProgramDto.SearchProgramCondition condition, Pageable pageable) {
+    public Page<SearchResponse> search(ProgramDto.SearchCondition condition, Pageable pageable) {
         QueryResults<SearchResponse> results = queryFactory
                 .select(new QProgramDto_SearchResponse(
                         program))
@@ -63,5 +63,16 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     private BooleanExpression idEq(Long id) {
         return isEmpty(id) ? null : program.id.eq(id);
+    }
+
+    @Override
+    public ProgramDto.DetailResponse detail(Long id) {
+        return queryFactory
+                .select(new QProgramDto_DetailResponse(
+                        program
+                ))
+                .from(program)
+                .where(program.isValid.eq(true))
+                .fetchOne();
     }
 }

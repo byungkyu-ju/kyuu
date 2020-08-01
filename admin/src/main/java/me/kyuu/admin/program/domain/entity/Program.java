@@ -22,16 +22,21 @@
 
 package me.kyuu.admin.program.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kyuu.admin.program.domain.dto.ProgramDto;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
+@Builder
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @DynamicUpdate
 public class Program {
     @Id
@@ -41,22 +46,29 @@ public class Program {
     private String name;
     private String url;
     private String remark;
-
+    @Builder.Default
     private boolean isValid = true;
 
-    public Program(ProgramDto.CreateProgramRequest request) {
+    public Program(ProgramDto.CreateRequest request) {
         this.name = request.getName();
         this.url = request.getUrl();
         this.remark = request.getRemark();
     }
 
-    public Program(ProgramDto.UpdateProgramRequest request) {
+    public Program(ProgramDto.UpdateRequest request) {
         this.name = request.getName();
         this.url = request.getUrl();
         this.remark = request.getRemark();
     }
 
-    public void updateProgram(Program program) {
+    public Program(ProgramDto.DetailResponse request) {
+        this.id = request.getId();
+        this.name = request.getName();
+        this.url = request.getUrl();
+        this.remark = request.getRemark();
+    }
+
+    public void update(Program program) {
         this.name = program.getName();
         this.url = program.getUrl();
         this.remark = program.getRemark();

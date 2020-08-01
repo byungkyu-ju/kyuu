@@ -23,7 +23,8 @@
 plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //querydsl
+    id "org.asciidoctor.convert" version "1.5.9.2" //restdocs
     id 'java'
 }
 
@@ -64,10 +65,30 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:{project-version}'
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:{project-version}'
+
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets') //restdocs
 }
 
 test {
     useJUnitPlatform()
+    outputs.dir snippetsDir //restdocs
+}
+
+asciidoctor { //restdocs
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
 
 //querydsl 추가 시작

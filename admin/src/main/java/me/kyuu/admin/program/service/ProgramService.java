@@ -40,14 +40,34 @@ public class ProgramService {
     private final ProgramRepository programRepository;
 
     @Transactional(readOnly = true)
-    public Page<ProgramDto.SearchResponse> search(ProgramDto.SearchProgramCondition condition, Pageable pageable) {
+    public Page<ProgramDto.SearchResponse> search(ProgramDto.SearchCondition condition, Pageable pageable) {
         return programRepository.search(condition, pageable);
     }
 
     @Transactional(readOnly = true)
     public ProgramDto.DetailResponse detail(Long id) {
-        Program program = programRepository.findById(id).orElseThrow(NoDataException::new);
+        return programRepository.detail(id);
+    }
+
+    @Transactional
+    public Long create(Program program) {
+        programRepository.save(program);
+        return program.getId();
+    }
+
+    @Transactional
+    public ProgramDto.DetailResponse update(Long id, Program updateRequest) {
+        ProgramDto.DetailResponse detail = programRepository.detail(id);
+        Program program = new Program(detail);
+        program.update(updateRequest);
         return new ProgramDto.DetailResponse(program);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Program program = programRepository.findById(id).orElseThrow();
+        program.deleteProgram();
+
     }
 
 /*
@@ -57,15 +77,15 @@ public class ProgramService {
     }
 
     @Transactional
-    public Long createProgram(Program program) {
+    public Long create(Program program) {
         programRepository.save(program);
         return program.getId();
     }
 
     @Transactional
-    public Program updateProgram(Long id, ProgramDto.UpdateProgramRequest request) {
+    public Program update(Long id, ProgramDto.updateRequest request) {
         Program program = programRepository.findById(id).orElseThrow();
-        program.updateProgram(new Program(request));
+        program.update(new Program(request));
         return program;
     }
 
