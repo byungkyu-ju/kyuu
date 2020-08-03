@@ -20,15 +20,11 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.domain.entity;
+package me.kyuu.admin.menu.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kyuu.admin.program.domain.dto.ProgramDto;
+import lombok.*;
+import me.kyuu.admin.menu.domain.dto.MenuDto;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
@@ -38,43 +34,57 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-public class Program {
+@Setter
+public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "program_id")
+    @Column(name = "menu_id")
     private Long id;
+
+    @Column(name = "parent_menu_id")
+    private Long parentId;
+
     private String name;
     private String url;
     private String remark;
+    private int sortOrder;
     @Builder.Default
     private boolean isValid = true;
 
-    public Program(ProgramDto.CreateRequest request) {
+
+    public Menu(MenuDto.CreateRequest request) {
         this.name = request.getName();
         this.url = request.getUrl();
         this.remark = request.getRemark();
     }
 
-    public Program(ProgramDto.UpdateRequest request) {
+    public Menu(MenuDto.UpdateRequest request) {
         this.name = request.getName();
         this.url = request.getUrl();
         this.remark = request.getRemark();
     }
 
-    public Program(ProgramDto.DetailResponse request) {
+    public Menu(MenuDto.DetailResponse request) {
         this.id = request.getId();
         this.name = request.getName();
         this.url = request.getUrl();
         this.remark = request.getRemark();
     }
 
-    public void update(Program program) {
-        this.name = program.getName();
-        this.url = program.getUrl();
-        this.remark = program.getRemark();
+
+    public void update(Menu menu) {
+        this.name = menu.getName();
+        this.url = menu.getUrl();
+        this.remark = menu.getRemark();
     }
 
-    public void deleteProgram() {
+
+    public void deleteMenu() {
         this.isValid = false;
+    }
+
+    public Menu create() {
+        this.isValid = true;
+        return this;
     }
 }

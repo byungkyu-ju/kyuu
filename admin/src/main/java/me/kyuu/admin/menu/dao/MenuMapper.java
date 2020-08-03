@@ -20,16 +20,14 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.dao;
+package me.kyuu.admin.menu.dao;
 
-import me.kyuu.admin.program.domain.entity.Program;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.apache.ibatis.annotations.Mapper;
 
-/**
- * @author byung-kyu.ju
- * @discription
- */
+import java.util.List;
+import java.util.Map;
 
-public interface ProgramRepository extends JpaRepository<Program, Long>, ProgramRepositoryCustom {
-
+@Mapper
+public interface MenuMapper {
+    List<Map<String, Object>> findLeftMenu();
 }

@@ -20,28 +20,15 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.core;
+package me.kyuu.admin.menu.dao;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import me.kyuu.admin.menu.domain.dto.MenuDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-/**
- * @author byung-kyu.ju
- * @discription
- */
+public interface MenuRepositoryCustom {
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Disabled
-public class DefaultApiControllerTest {
-    @Autowired
-    protected MockMvc mockMvc;
+    Page<MenuDto.SearchResponse> search(MenuDto.SearchCondition condition, Pageable pageable);
 
-    @Autowired
-    protected ObjectMapper objectMapper;
-
+    MenuDto.DetailResponse detail(Long id);
 }

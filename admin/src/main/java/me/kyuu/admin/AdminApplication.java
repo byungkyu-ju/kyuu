@@ -1,11 +1,10 @@
 package me.kyuu.admin;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.hateoas.config.HypermediaRestTemplateConfigurer;
 
 import javax.persistence.EntityManager;
 
@@ -20,4 +19,10 @@ public class AdminApplication {
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
 }

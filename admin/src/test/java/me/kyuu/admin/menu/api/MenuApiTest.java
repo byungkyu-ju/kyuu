@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.api;
+package me.kyuu.admin.menu.api;
 
-import me.kyuu.admin.program.core.DefaultApiControllerTest;
-import me.kyuu.admin.program.domain.dto.ProgramDto;
-import me.kyuu.admin.program.domain.entity.Program;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.kyuu.admin.menu.domain.dto.MenuDto;
+import me.kyuu.admin.menu.domain.entity.Menu;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,18 +51,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class MenuApiTest extends DefaultApiControllerTest {
+class MenuApiTest {
+    @Autowired
+    protected MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
 
     @Autowired
     EntityManager entityManager;
 
-    @Autowired
-    private MockMvc mockMvc;
-
     @Test
-    @DisplayName(value = "프로그램목록 조회")
-    void findPrograms() throws Exception {
-        mockMvc.perform(get("/api/programs")
+    @DisplayName(value = "메뉴목록 조회")
+    void findMenus() throws Exception {
+        mockMvc.perform(get("/api/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -71,9 +74,9 @@ class MenuApiTest extends DefaultApiControllerTest {
     }
 
     @Test
-    @DisplayName(value = "프로그램목록 조회_컨텐츠타입에러")
-    void findPrograms_contentTypeError() throws Exception {
-        mockMvc.perform(get("/api/programs")
+    @DisplayName(value = "메뉴목록 조회_컨텐츠타입에러")
+    void findMenus_contentTypeError() throws Exception {
+        mockMvc.perform(get("/api/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -82,7 +85,7 @@ class MenuApiTest extends DefaultApiControllerTest {
                 .andExpect(jsonPath("page").exists());
 
         //
-        mockMvc.perform(get("/api/programs")
+        mockMvc.perform(get("/api/menus")
                 .contentType(MediaType.APPLICATION_XML)
                 .accept(MediaTypes.HAL_JSON))
                 .andDo(print())
@@ -92,17 +95,17 @@ class MenuApiTest extends DefaultApiControllerTest {
     }
 
     @Test
-    @DisplayName(value = "프로그램 추가")
-    void createProgram() throws Exception {
+    @DisplayName(value = "메뉴 추가")
+    void createMenu() throws Exception {
         //given
-        ProgramDto.CreateRequest createRequest = ProgramDto.CreateRequest.builder()
-                .name("program name")
+        MenuDto.CreateRequest createRequest = MenuDto.CreateRequest.builder()
+                .name("menu name")
                 .url("url")
                 .remark("remark")
                 .build();
 
         //when
-        ResultActions action = mockMvc.perform(post("/api/programs/program")
+        ResultActions action = mockMvc.perform(post("/api/menus/menu")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(createRequest)))
@@ -111,7 +114,6 @@ class MenuApiTest extends DefaultApiControllerTest {
         //then
         action
                 .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("name").exists())
@@ -120,29 +122,29 @@ class MenuApiTest extends DefaultApiControllerTest {
     }
 
     @Test
-    @DisplayName(value = "프로그램 수정")
-    void updateProgram() throws Exception {
+    @DisplayName(value = "메뉴 수정")
+    void updateMenu() throws Exception {
 
         //given
-        Program program = Program.builder()
-                .name("program")
+        Menu menu = Menu.builder()
+                .name("menu")
                 .url("url")
                 .remark("remark")
                 .isValid(true)
                 .build();
 
-        entityManager.persist(program);
+        entityManager.persist(menu);
 
-        ProgramDto.UpdateRequest updateRequest = ProgramDto.UpdateRequest.builder()
-                .name("new program")
+        MenuDto.UpdateRequest updateRequest = MenuDto.UpdateRequest.builder()
+                .name("new menu")
                 .url("url")
                 .remark("remark")
                 .build();
 
         //when
-        program.update(new Program(updateRequest));
+        menu.update(new Menu(updateRequest));
 
-        ResultActions actions = mockMvc.perform(put("/api/programs/program/{id}", program.getId())
+        ResultActions actions = mockMvc.perform(put("/api/menus/menu/{id}", menu.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(updateRequest)))
                 .andDo(print());
@@ -154,25 +156,32 @@ class MenuApiTest extends DefaultApiControllerTest {
     }
 
     @Test
-    @DisplayName(value = "프로그램 삭제")
-    void deleteProgram() throws Exception {
+    @DisplayName(value = "메뉴 삭제")
+    void deleteMenu() throws Exception {
 
         //given
-        Program program = Program.builder()
-                .name("program")
+        Menu menu = Menu.builder()
+                .name("menu")
                 .url("url")
                 .remark("remark")
                 .isValid(true)
                 .build();
 
-        entityManager.persist(program);
+        entityManager.persist(menu);
         //when
-        ResultActions actions = mockMvc.perform(delete("/api/programs/program/{id}", program.getId())
+        ResultActions actions = mockMvc.perform(delete("/api/menus/menu/{id}", menu.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
         //then
         actions
                 .andExpect(status().isNoContent());
 
+    }
+
+    @Test
+    @DisplayName(value = "좌측메뉴")
+    void findLeftMenu() throws Exception {
+        mockMvc.perform(get("/api/menus/left"))
+                .andDo(print());
     }
 }

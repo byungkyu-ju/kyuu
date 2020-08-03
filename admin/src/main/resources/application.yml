@@ -11,6 +11,16 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  profiles:
+    active: local
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    jdbc-type-for-null: varchar
+  type-aliases-package: me.kyuu.admin.core.mvc
 
 logging:
   level:

@@ -20,16 +20,17 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.domain.dto;
+package me.kyuu.admin.menu.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import me.kyuu.admin.program.api.ProgramApi;
-import me.kyuu.admin.program.domain.entity.Program;
+import me.kyuu.admin.menu.api.MenuApi;
+import me.kyuu.admin.menu.domain.entity.Menu;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -39,7 +40,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * @discription
  */
 
-public class ProgramDto {
+public class MenuDto {
 
     @Getter
     @AllArgsConstructor
@@ -50,22 +51,27 @@ public class ProgramDto {
         private String url;
     }
 
-    @Relation(value = "program", collectionRelation = "programs")
+    @Relation(value = "menu", collectionRelation = "menus")
     //@Getter
-    @Data
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SearchResponse extends EntityModel<SearchResponse> {
         private Long id;
         private String name;
         private String url;
         private String remark;
+        private int sortOrder;
+        private List<Menu> childMenu;
 
         @QueryProjection
-        public SearchResponse(Program program) {
-            this.id = program.getId();
-            this.name = program.getName();
-            this.url = program.getUrl();
-            this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).search(null,null,null)).slash(id).withSelfRel());
+        public SearchResponse(Menu menu) {
+            this.id = menu.getId();
+            this.name = menu.getName();
+            this.url = menu.getUrl();
+            this.remark = menu.getRemark();
+            this.sortOrder = menu.getSortOrder();
+            add(linkTo(methodOn(MenuApi.class).search(null, null, null)).slash(id).withSelfRel());
         }
     }
 
@@ -76,14 +82,16 @@ public class ProgramDto {
         private String name;
         private String url;
         private String remark;
+        private int sortOrder;
 
         @QueryProjection
-        public DetailResponse(Program program) {
-            this.id = program.getId();
-            this.name = program.getName();
-            this.url = program.getUrl();
-            this.remark = program.getRemark();
-            add(linkTo(methodOn(ProgramApi.class).detail(id)).withSelfRel());
+        public DetailResponse(Menu menu) {
+            this.id = menu.getId();
+            this.name = menu.getName();
+            this.url = menu.getUrl();
+            this.remark = menu.getRemark();
+            this.sortOrder = menu.getSortOrder();
+            add(linkTo(methodOn(MenuApi.class).detail(id)).withSelfRel());
         }
     }
 
@@ -98,7 +106,7 @@ public class ProgramDto {
         @NotNull
         private String url;
         private String remark;
-
+        private int sortOrder;
     }
 
 
@@ -111,6 +119,19 @@ public class ProgramDto {
         private String name;
         private String url;
         private String remark;
+        private int sortOrder;
     }
 
+    @Relation(value = "menus", collectionRelation = "leftMenus")
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class LeftMenuResponse extends EntityModel<LeftMenuResponse> {
+        private Long id;
+        private Long parentId;
+        private String name;
+        private String url;
+        private int sortOrder;
+    }
 }

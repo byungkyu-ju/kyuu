@@ -22,7 +22,7 @@
 
 package me.kyuu.admin.core.exception;
 
-public class NoDataException extends RuntimeException{
+public class NoDataException extends RuntimeException {
 
     public NoDataException() {
         super();

@@ -20,14 +20,13 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.api;
+package me.kyuu.admin.menu.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kyuu.admin.program.domain.dto.ProgramDto;
-import me.kyuu.admin.program.domain.entity.Program;
-import me.kyuu.admin.program.service.ProgramService;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.kyuu.admin.menu.domain.dto.MenuDto;
+import me.kyuu.admin.menu.domain.entity.Menu;
+import me.kyuu.admin.menu.service.MenuService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
-
 import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -49,43 +47,50 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/programs", produces = MediaTypes.HAL_JSON_VALUE)
-public class ProgramApi {
+@RequestMapping(value = "/api/menus", produces = MediaTypes.HAL_JSON_VALUE)
+public class MenuApi {
 
-    private final ProgramService programService;
+    private final MenuService menuService;
 
     @GetMapping("")
-    public ResponseEntity<PagedModel<EntityModel<ProgramDto.SearchResponse>>> search(@RequestBody(required = false) ProgramDto.SearchCondition condition, @Nullable Pageable pageable, PagedResourcesAssembler<ProgramDto.SearchResponse> assembler) {
-        if(condition == null) condition = new ProgramDto.SearchCondition();
-        Page<ProgramDto.SearchResponse> programs = programService.search(condition, pageable);
-        PagedModel<EntityModel<ProgramDto.SearchResponse>> pagedModel = assembler.toModel(programs);
+    public ResponseEntity<PagedModel<EntityModel<MenuDto.SearchResponse>>> search(@RequestBody(required = false) MenuDto.SearchCondition condition, @Nullable Pageable pageable, PagedResourcesAssembler<MenuDto.SearchResponse> assembler) {
+        if (condition == null) condition = new MenuDto.SearchCondition();
+        Page<MenuDto.SearchResponse> menus = menuService.search(condition, pageable);
+        PagedModel<EntityModel<MenuDto.SearchResponse>> pagedModel = assembler.toModel(menus);
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/program/{id}")
-    public ResponseEntity<EntityModel<ProgramDto.DetailResponse>> detail(@PathVariable("id") Long id) {
-        EntityModel<ProgramDto.DetailResponse> detail = programService.detail(id);
+    @GetMapping("/menu/{id}")
+    public ResponseEntity<EntityModel<MenuDto.DetailResponse>> detail(@PathVariable("id") Long id) {
+        EntityModel<MenuDto.DetailResponse> detail = menuService.detail(id);
         return ResponseEntity.ok(detail);
     }
 
-    @PostMapping("/program")
-    public ResponseEntity<EntityModel<ProgramDto.DetailResponse>> create(@RequestBody @Valid ProgramDto.CreateRequest request) {
-        Long programId = programService.create(new Program(request));
-        EntityModel<ProgramDto.DetailResponse> detail = programService.detail(programId);
-        URI createdUri = linkTo(methodOn(ProgramApi.class).create(null)).withSelfRel().toUri();
+    @PostMapping("/menu")
+    public ResponseEntity<EntityModel<MenuDto.DetailResponse>> create(@RequestBody @Valid MenuDto.CreateRequest request) {
+        Menu savedMenu = menuService.create(new Menu(request));
+        EntityModel<MenuDto.DetailResponse> detail = new MenuDto.DetailResponse(savedMenu);
+        URI createdUri = linkTo(methodOn(MenuApi.class).detail(savedMenu.getId())).toUri();
         return ResponseEntity.created(createdUri).body(detail);
     }
 
-    @PutMapping("/program/{id}")
-    public ResponseEntity<EntityModel<ProgramDto.DetailResponse>> update(@PathVariable("id") Long id,
-                                                                       @RequestBody @Valid ProgramDto.UpdateRequest request) {
-        ProgramDto.DetailResponse response = programService.update(id, new Program(request));
+    @PutMapping("/menu/{id}")
+    public ResponseEntity<EntityModel<MenuDto.DetailResponse>> update(@PathVariable("id") Long id,
+                                                                      @RequestBody @Valid MenuDto.UpdateRequest request) {
+        MenuDto.DetailResponse response = menuService.update(id, new Menu(request));
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/program/{id}")
+    @DeleteMapping("/menu/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
-        programService.delete(id);
+        menuService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/left")
+    public ResponseEntity<CollectionModel<EntityModel<MenuDto.LeftMenuResponse>>> findLeftMenu() {
+        CollectionModel<EntityModel<MenuDto.LeftMenuResponse>> leftBar = menuService.findLeftMenu();
+        leftBar.add(linkTo(methodOn((MenuApi.class)).findLeftMenu()).withSelfRel());
+        return ResponseEntity.ok(leftBar);
     }
 }

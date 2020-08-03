@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.kyuu.admin.menu.dao.MenuMapper">
+    <select id="findLeftMenu" resultType="CamelCaseMapper">
+    WITH RECURSIVE W_MENU_TREE (MENU_ID, PARENT_MENU_ID, NAME, URL)  AS
+    (
+           SELECT MENU_ID,
+                  PARENT_MENU_ID,
+                  NAME,
+                  URL
+           FROM   MENU
+           WHERE  PARENT_MENU_ID IS NULL
+           UNION ALL
+           SELECT     CHILD_MENU.MENU_ID,
+                      CHILD_MENU.PARENT_MENU_ID,
+                      CHILD_MENU.NAME,
+                      CHILD_MENU.URL
+           FROM       MENU CHILD_MENU
+           INNER JOIN W_MENU_TREE
+           ON         CHILD_MENU.PARENT_MENU_ID = W_MENU_TREE.MENU_ID )
+    SELECT MENU_ID AS ID,
+           PARENT_MENU_ID AS PARENT_ID,
+           NAME,
+           URL
+    FROM   W_MENU_TREE;
+    </select>
+</mapper>

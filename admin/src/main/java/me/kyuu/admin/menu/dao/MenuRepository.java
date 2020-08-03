@@ -20,17 +20,15 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.core.config;
+package me.kyuu.admin.menu.dao;
 
-import org.springframework.boot.web.client.RestTemplateCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.hateoas.config.HypermediaRestTemplateConfigurer;
+import me.kyuu.admin.menu.domain.entity.Menu;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class RestTemplateConfigurer {
-    @Bean
-    RestTemplateCustomizer hypermediaRestTemplateCustomizer(HypermediaRestTemplateConfigurer configurer) {
-        return restTemplate -> {
-            configurer.registerHypermediaTypes(restTemplate);
-        };
-    }
+/**
+ * @author byung-kyu.ju
+ * @discription
+ */
+
+public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositoryCustom {
 }

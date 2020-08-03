@@ -20,14 +20,15 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.dao;
+package me.kyuu.admin.core.mvc;
 
-import me.kyuu.admin.program.domain.dto.ProgramDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.apache.commons.text.CaseUtils;
 
-public interface ProgramRepositoryCustom {
+import java.util.HashMap;
 
-    Page<ProgramDto.SearchResponse> search(ProgramDto.SearchCondition condition, Pageable pageable);
-    ProgramDto.DetailResponse detail(Long id);
+public class CamelCaseMapper extends HashMap {
+    @Override
+    public Object put(Object key, Object value) {
+        return super.put(CaseUtils.toCamelCase(key.toString(), false, new char[]{'_'}), value);
+    }
 }

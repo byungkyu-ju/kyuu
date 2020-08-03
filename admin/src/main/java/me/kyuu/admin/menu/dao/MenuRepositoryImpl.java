@@ -20,15 +20,14 @@
  * SOFTWARE.
  */
 
-package me.kyuu.admin.program.dao;
+package me.kyuu.admin.menu.dao;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import me.kyuu.admin.program.domain.dto.ProgramDto;
-import me.kyuu.admin.program.domain.dto.ProgramDto.SearchResponse;
-import me.kyuu.admin.program.domain.dto.QProgramDto_DetailResponse;
-import me.kyuu.admin.program.domain.dto.QProgramDto_SearchResponse;
+import me.kyuu.admin.menu.domain.dto.MenuDto;
+import me.kyuu.admin.menu.domain.dto.QMenuDto_DetailResponse;
+import me.kyuu.admin.menu.domain.dto.QMenuDto_SearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,43 +35,47 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static me.kyuu.admin.program.domain.entity.QProgram.program;
+import static me.kyuu.admin.menu.domain.entity.QMenu.menu;
 import static org.springframework.util.StringUtils.isEmpty;
 
-public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
+public class MenuRepositoryImpl implements MenuRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager entityManager;
 
-    public ProgramRepositoryImpl(JPAQueryFactory queryFactory, EntityManager entityManager) {
+    public MenuRepositoryImpl(JPAQueryFactory queryFactory, EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
+        this.entityManager = entityManager;
     }
-    @Override
-    public Page<SearchResponse> search(ProgramDto.SearchCondition condition, Pageable pageable) {
-        QueryResults<SearchResponse> results = queryFactory
-                .select(new QProgramDto_SearchResponse(
-                        program))
-                .from(program)
-                .where(program.isValid.eq(true),
+
+    public Page<MenuDto.SearchResponse> search(MenuDto.SearchCondition condition, Pageable pageable) {
+        QueryResults<MenuDto.SearchResponse> results = queryFactory
+                .select(new QMenuDto_SearchResponse(
+                        menu))
+                .from(menu)
+                .where(menu.isValid.eq(true),
                         idEq(condition.getId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<SearchResponse> contents = results.getResults();
+        List<MenuDto.SearchResponse> contents = results.getResults();
         return new PageImpl<>(contents, pageable, results.getTotal());
     }
 
+
     private BooleanExpression idEq(Long id) {
-        return isEmpty(id) ? null : program.id.eq(id);
+        return isEmpty(id) ? null : menu.id.eq(id);
     }
 
     @Override
-    public ProgramDto.DetailResponse detail(Long id) {
+    public MenuDto.DetailResponse detail(Long id) {
         return queryFactory
-                .select(new QProgramDto_DetailResponse(
-                        program
+                .select(new QMenuDto_DetailResponse(
+                        menu
                 ))
-                .from(program)
-                .where(program.isValid.eq(true))
+                .from(menu)
+                .where(menu.isValid.eq(true))
                 .fetchOne();
     }
+
 }
